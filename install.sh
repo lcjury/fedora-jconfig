@@ -2,13 +2,14 @@
 cp *.repo /etc/yum.repos.d/
 
 # rpmfusion repo
-su -c 'yum localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm'
+su -c 'dnf localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm'
 
 #update vim-minimal (fedora 20 conflict)
 #sudo yum update vim-minimal
 
+
 #install programs
-sudo yum install nano gcc google-chrome-stable nautilus-dropbox numix-gtk-theme numix-icon-theme numix-icon-theme-circle gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg
+sudo dnf install gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox numix-gtk-theme numix-icon-theme numix-icon-theme-circle gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg
 
 #download solarized
 git clone https://github.com/sigurdga/gnome-terminal-colors-solarized.git
@@ -40,6 +41,17 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/or
 
 #install gnome-shell-extensions
 git clone git://git.gnome.org/gnome-shell-extensions
-cd gnome-shell-extensions/extensions/
-sudo cp -r alternate-tab /usr/share/gnome-shell/extensions/
-cd ../../
+cd gnome-shell-extensions
+sh autogen.sh
+make
+sudo cp -r extensions/alternate-tab /usr/share/gnome-shell/extensions/
+cd ../
+
+#configure git
+git config --global user.name "Luis Jury"
+git config --global user.email "zeui16@gmail.com"
+
+#Ruby on Rails
+sudo dnf install mysql-devel ruby-devel rubygems libxml2-devel libxslt-devel sqlite-devel nodejs
+gem install rails
+gem install sqlite3
