@@ -17,6 +17,8 @@ git clone https://github.com/sigurdga/gnome-terminal-colors-solarized.git
 cd gnome-terminal-colors-solarized
 sh install.sh
 cd ..
+#delete solarized theme repo
+sudo rm -rf gnome-terminal-colors-solarized #really don't know why have to use sudo
 
 #init dropbox
 dropbox start -i &
@@ -34,6 +36,8 @@ sh autogen.sh
 make
 sudo cp -r extensions/alternate-tab /usr/share/gnome-shell/extensions/
 cd ../
+#delete gnome shell extensions repo
+sudo rm -rf gnome-shell-extensions
 
 #Ruby on Rails
 sudo dnf install mysql-devel ruby-devel rubygems libxml2-devel libxslt-devel sqlite-devel nodejs
