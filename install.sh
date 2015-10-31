@@ -1,21 +1,18 @@
 #Copy Repositories
-cp *.repo /etc/yum.repos.d/
+sudo cp repositories/* /etc/yum.repos.d/
 
 # rpmfusion repo
-su -c 'yum localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm'
-
-#update vim-minimal (fedora 20 conflict)
-#sudo yum update vim-minimal
-
+su -c 'dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm'
+su -c 'dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-rawhide.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-rawhide.noarch.rpm'
 
 #install programs
-sudo dnf install gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox numix-gtk-theme numix-icon-theme numix-icon-theme-circle gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg
+sudo dnf install  gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox numix-gtk-theme numix-icon-theme numix-icon-theme-circle gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool
 
 #configure git
 git config --global user.name "lcjury"
 git config --global user.email zeui16@gmail.com
 
-#download solarized
+#download solarized theme for gnome terminal
 git clone https://github.com/sigurdga/gnome-terminal-colors-solarized.git
 cd gnome-terminal-colors-solarized
 sh install.sh
@@ -35,7 +32,7 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/or
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command gnome-terminal
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Alt><Ctrl>T"
 
-#install gnome-shell-extensions
+#install alternate tab gnome shell extension
 git clone git://git.gnome.org/gnome-shell-extensions
 cd gnome-shell-extensions
 sh autogen.sh
@@ -43,18 +40,20 @@ make
 sudo cp -r extensions/alternate-tab /usr/share/gnome-shell/extensions/
 cd ../
 
-
 #Ruby on Rails
 sudo dnf install mysql-devel ruby-devel rubygems libxml2-devel libxslt-devel sqlite-devel nodejs
 gem install rails
 gem install sqlite3
 gem install heroku
 
+# Vim Pathogen
+mkdir -p ~/.vim/autoload ~/.vim/bundle && \
+curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+
 # Vim config
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 cp vimrc ~/.vimrc
 vim +PluginInstall +qall
-
 
 #Fonts
 dnf install google-droid-sans-mono-fonts
