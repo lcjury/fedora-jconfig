@@ -22,6 +22,7 @@ syntax enable
 
 let g:gruvbox_italic=0
 colorscheme gruvbox
+set background=dark
 
 set nospell
 set hlsearch
