@@ -51,7 +51,7 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
 # Vim config
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-cp vimrc ~/.vimrc
+cp .vimrc ~/.vimrc
 vim +PluginInstall +qall
 
 #Fonts
