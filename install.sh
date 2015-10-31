@@ -6,7 +6,7 @@ su -c 'dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfu
 su -c 'dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-rawhide.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-rawhide.noarch.rpm'
 
 #install programs
-sudo dnf install  gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox numix-gtk-theme numix-icon-theme numix-icon-theme-circle gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool
+sudo dnf install  gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool
 
 #configure git
 git config --global user.name "lcjury"
@@ -20,11 +20,6 @@ cd ..
 
 #init dropbox
 dropbox start -i &
-
-#put Numix theme
-gsettings set org.gnome.desktop.interface gtk-theme "Numix"
-gsettings set org.gnome.desktop.wm.preferences theme "Numix"
-gsettings set org.gnome.desktop.interface icon-theme "Numix-Circle"
 
 # Set Keyboard Shortcuts Bindings
 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
