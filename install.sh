@@ -56,3 +56,8 @@ vim +PluginInstall +qall
 
 #Fonts
 dnf install google-droid-sans-mono-fonts
+
+
+#Bash
+cp .bashrc ~/.bashrc
+cp .git-completion.bash ~/.git-completion.bash
