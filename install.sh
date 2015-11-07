@@ -57,6 +57,10 @@ vim +PluginInstall +qall
 #Fonts
 dnf install google-droid-sans-mono-fonts
 
+#Setting droid sans mono 11 for terminal font
+$PROFILE=`dconf read /org/gnome/terminal/legacy/profiles:/default | sed s/^\'// | sed s/\'$//`
+dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/font "'Droid Sans Mono 11'"
+dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/use-system-font false
 
 #Bash
 cp .bashrc ~/.bashrc
