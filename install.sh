@@ -6,7 +6,7 @@ su -c 'dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfu
 su -c 'dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-rawhide.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-rawhide.noarch.rpm'
 
 #install programs
-sudo dnf install  gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool
+sudo dnf install  gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool gnome-tweak-tool
 
 #configure git
 git config --global user.name "lcjury"
@@ -18,7 +18,7 @@ cd gnome-terminal-colors-solarized
 sh install.sh
 cd ..
 #delete solarized theme repo
-sudo rm -rf gnome-terminal-colors-solarized #really don't know why have to use sudo
+rm -rf gnome-terminal-colors-solarized
 
 #init dropbox
 dropbox start -i &
@@ -40,7 +40,7 @@ cd ../
 sudo rm -rf gnome-shell-extensions
 
 #Ruby on Rails
-sudo dnf install mysql-devel ruby-devel rubygems libxml2-devel libxslt-devel sqlite-devel nodejs
+sudo dnf install mysql-devel ruby-devel rubygems libxml2-devel libxslt-devel sqlite-devel nodejs rpm-build
 gem install rails
 gem install sqlite3
 gem install heroku
