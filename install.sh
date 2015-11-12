@@ -61,8 +61,13 @@ dnf install google-droid-sans-mono-fonts
 $PROFILE=`dconf read /org/gnome/terminal/legacy/profiles:/default | sed s/^\'// | sed s/\'$//`
 dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/font "'Droid Sans Mono 11'"
 dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/use-system-font false
-
+dconf write /org/gnome/terminal/legacy/default-show-menubar false
 #Bash
 cp .bashrc ~/.bashrc
 cp .git-completion.bash ~/.git-completion.bash
 cp .tmux.conf ~/.tmux.conf
+
+#Apache & PHP
+sudo dnf install -y httpd php
+#Start httpd systemctl start httpd
+#vi /var/www/html/test.php
