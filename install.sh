@@ -6,7 +6,7 @@ su -c 'dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rp
 su -c 'dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-rawhide.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-rawhide.noarch.rpm'
 
 #install programs
-sudo dnf install -y gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool gnome-tweak-tool
+sudo dnf install -y gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool gnome-tweak-tool gtk-murrine-engine 
 
 #configure git
 git config --global user.name "lcjury"
@@ -72,3 +72,9 @@ sudo dnf install -y httpd php mariadb-server php-mysql phpmyadmin
 #Start httpd: systemctl start httpd
 #vi /var/www/html/test.php
 mysql_secure_installation
+
+# Install ceti 2 theme
+git clone https://github.com/horst3180/ceti-2-theme --depth 1 && cd ceti-2-theme
+./autogen.sh --prefix=/usr
+sudo make install
+cd ..
