@@ -68,6 +68,7 @@ cp .git-completion.bash ~/.git-completion.bash
 cp .tmux.conf ~/.tmux.conf
 
 #Apache & PHP
-sudo dnf install -y httpd php
-#Start httpd systemctl start httpd
+sudo dnf install -y httpd php mariadb-server php-mysql phpmyadmin
+#Start httpd: systemctl start httpd
 #vi /var/www/html/test.php
+mysql_secure_installation

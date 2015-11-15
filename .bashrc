@@ -46,9 +46,14 @@ grb_git_prompt() {
 #PS1="[\u@\h \W]\$" # OLD Promp
 PS1="[\u@\h \W]\$(grb_git_prompt)$"
 
-
-
 # Uncomment the following line if you don't like systemctl's auto-paging feature:                                                                                                                                                                                                       
 # export SYSTEMD_PAGE                                                                                                                                                                                                
 
 # User specific aliases and functions
+
+alias start-apache='systemctl start httpd'
+alias stop-apache='systemctl stop httpd'
+alias start-mariadb='systemctl start mariadb'
+alias stop-mariadb='systemctl stop mariadb'
+alias start-server='start-apache && start-mariadb'
+alias stop-server='stop-apache && stop-mariadb'
