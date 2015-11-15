@@ -2,11 +2,11 @@
 sudo cp repositories/* /etc/yum.repos.d/
 
 # rpmfusion repo
-su -c 'dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm'
-su -c 'dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-rawhide.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-rawhide.noarch.rpm'
+su -c 'dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm'
+su -c 'dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-rawhide.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-rawhide.noarch.rpm'
 
 #install programs
-sudo dnf install  gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool gnome-tweak-tool
+sudo dnf install -y gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool gnome-tweak-tool
 
 #configure git
 git config --global user.name "lcjury"
@@ -55,7 +55,7 @@ cp .vimrc ~/.vimrc
 vim +PluginInstall +qall
 
 #Fonts
-dnf install google-droid-sans-mono-fonts
+dnf install -y google-droid-sans-mono-fonts
 
 #Setting droid sans mono 11 for terminal font
 $PROFILE=`dconf read /org/gnome/terminal/legacy/profiles:/default | sed s/^\'// | sed s/\'$//`
