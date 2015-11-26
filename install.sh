@@ -90,6 +90,6 @@ cd ..
 
 #Laravel installation 
 # When installing composer, ~/.composer/vendor/bin should be added to path
-sudo dnf install -y composer
+sudo dnf install -y composer php-mcrypt
 composer global require "laravel/installer=~1.1"
 
