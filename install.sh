@@ -87,3 +87,10 @@ git clone https://github.com/horst3180/ceti-2-theme --depth 1 && cd ceti-2-theme
 ./autogen.sh --prefix=/usr
 sudo make install
 cd ..
+
+
+#Laravel installation 
+# When installing composer, ~/.composer/vendor/bin should be added to path
+sudo dnf install -y composer php-mcrypt
+composer global require "laravel/installer=~1.1"
+
