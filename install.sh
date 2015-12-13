@@ -98,3 +98,9 @@ composer global require "laravel/installer=~1.1"
 sudo cp git-completion.bash /etc/bash_completion.d/
 #Artisan tab-complete
 sudo cp artisan /etc/bash_completion.d/
+
+#Install and set Ceti-2 Theme
+git clone https://github.com/horst3180/ceti-2-theme --depth 1 && cd ceti-2-theme
+./autogen.sh --prefix=/usr
+sudo make install
+dconf write /org/gnome/desktop/interface/gtk-theme 'Ceti-2'
