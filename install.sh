@@ -95,6 +95,6 @@ sudo dnf install -y composer php-mcrypt
 composer global require "laravel/installer=~1.1"
 
 #Git tab-complete
-sudo cp git-completion.bash /etc/bash_completion/
+sudo cp git-completion.bash /etc/bash_completion.d/
 #Artisan tab-complete
-sudo cp artisan /etc/bash_completion/
+sudo cp artisan /etc/bash_completion.d/
