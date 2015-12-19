@@ -82,6 +82,10 @@ sudo dnf install -y httpd php mariadb-server php-mysql phpmyadmin
 #vi /var/www/html/test.php
 mysql_secure_installation
 
+#Common installs
+sudo dnf install -y npm
+sudo npm install --global gulp
+
 # Install ceti 2 theme
 git clone https://github.com/horst3180/ceti-2-theme --depth 1 && cd ceti-2-theme
 ./autogen.sh --prefix=/usr
