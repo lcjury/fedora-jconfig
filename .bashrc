@@ -5,55 +5,133 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-. ~/.git-completion.bash
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
 
-# Git prompt components
-function minutes_since_last_commit {
-  now=`date +%s`
-  last_commit=`git log --pretty=format:'%at' -1`
-  seconds_since_last_commit=$((now-last_commit))
-  minutes_since_last_commit=$((seconds_since_last_commit/60))
-  echo $minutes_since_last_commit
-}
-
-grb_git_prompt() {
-
-  # Set Colors
-  local NORMAL="\e[m"
-  local RED="\e[1;41m"
-  local YELLOW="\e[2;43m"
-  local GREEN="\e[2;42m"
-
-  local g="$(__gitdir)"
-
-  if [ -n "$g" ]; then
-    local MINUTES_SINCE_LAST_COMMIT=`minutes_since_last_commit`
-    if [ "$MINUTES_SINCE_LAST_COMMIT" -gt 30 ]; then
-      local COLOR=${RED}
-    elif [ "$MINUTES_SINCE_LAST_COMMIT" -gt 10 ]; then
-      local COLOR=${YELLOW}
-    else
-      local COLOR=${GREEN}
-    fi
-
-    local SINCE_LAST_COMMIT="${COLOR}$(minutes_since_last_commit)m${NORMAL}"
-    # The __git_ps1 function inserts the current git branch where %s is
-    local GIT_PROMPT=`__git_ps1 "(%s|${SINCE_LAST_COMMIT})"`
-    echo ${GIT_PROMPT}
-  fi
-}
-
-#PS1="[\u@\h \W]\$" # OLD Promp
-PS1="[\u@\h \W]\$(grb_git_prompt)$"
-
-# Uncomment the following line if you don't like systemctl's auto-paging feature:                                                                                                                                                                                                       
-# export SYSTEMD_PAGE                                                                                                                                                                                                
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
 
 # User specific aliases and functions
+if [ -d ~/.bashrc.d ]; then
+    for rc in ~/.bashrc.d/*; do
+        if [ -f "$rc" ]; then
+            . "$rc"
+        fi
+    done
+fi
+unset rc
+eval "$(mise activate bash)"
 
-alias start-apache='systemctl start httpd'
-alias stop-apache='systemctl stop httpd'
-alias start-mariadb='systemctl start mariadb'
-alias stop-mariadb='systemctl stop mariadb'
-alias start-server='start-apache && start-mariadb'
-alias stop-server='stop-apache && stop-mariadb'
+
+# opencode
+export PATH=/home/lcjury/.opencode/bin:$PATH
+
+#-------------------------
+# Bash shopts.
+#-------------------------
+shopt -s histappend # appends to the history instead of overwriting it.
+shopt -s cmdhist # bash attemps to save multiple line commands in one history entry.
+shopt -s lithist # save multi-line commands using \n instead of ,
+#shopt -s no_empty_cmd_completion # if using tab on empty line, don't do anything.
+shopt -s cdspell # if cd X, X is miss espelled, fix it.
+
+#-------------------------
+# Mist.
+#-------------------------
+# don't put duplicate lines or lines starting with space in the history.
+HISTCONTROL=ignoreboth
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=10000
+HISTFILESIZE=20000
+
+#-------------------------
+# Aliases.
+#-------------------------
+alias ls='ls --color=auto'
+alias la='ls -la'
+alias gs='git status'
+alias ga='git add'
+
+#-------------------------
+# Completion.
+#-------------------------
+complete -A alias         alias unalias
+complete -A export        export printenv
+complete -A shopt         shopt
+complete -A directory     cd rmdir
+complete -A signal        kill killall
+complete -A job -P '%'    fg jobs
+complete -A helptopic     help
+complete -A command       which
+
+#-------------
+# bash promtp.
+#-------------
+
+#if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
+#  export TERM=gnome-256color
+#elif infocmp xterm-256color >/dev/null 2>&1; then
+#  if [ `toe -a | grep -q xterm-256color-italics` ]; then
+#  export TERM=xterm-256color-italics
+#  else
+#  export TERM=xterm-256color
+#  fi
+#fi
+
+if tput setaf 1 &> /dev/null; then
+  tput sgr0
+  if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
+    # Changed these colors to fit Solarized theme
+    ORANGE=$(tput setaf 166)
+    GREEN=$(tput setaf 64)
+    PURPLE=$(tput setaf 61)
+    WHITE=$(tput setaf 244)
+  else
+    ORANGE=$(tput setaf 4)
+    GREEN=$(tput setaf 2)
+    PURPLE=$(tput setaf 1)
+    WHITE=$(tput setaf 7)
+  fi
+  BOLD=$(tput bold)
+  RESET=$(tput sgr0)
+else
+  ORANGE="\033[1;33m"
+  GREEN="\033[1;32m"
+  PURPLE="\033[1;35m"
+  WHITE="\033[1;37m"
+  RESET="\033[m"
+fi
+
+export ORANGE
+export GREEN
+export PURPLE
+export WHITE
+export BOLD
+export RESET
+
+function parse_git_dirty() {
+  [[ $(git status 2> /dev/null | tail -n1) != *"working directory clean"* ]] && echo "*"
+}
+
+function parse_git_branch() {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
+}
+
+function minutes_since_last_commit()
+{
+    now=`date +%s`
+        last_commit=`git log --pretty=format:'%at' -1`
+        seconds_since_last_commit=$((now-last_commit))
+        minutes_since_last_commit=$((seconds_since_last_commit/60))
+        echo $minutes_since_last_commit
+}
+
+export PS1="\[$ORANGE\]\h\[$WHITE\] \[$GREEN\]\w\[$WHITE\] \$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(parse_git_branch)\[$WHITE\]\$ \[$RESET\]"
+export PS1="\[$ORANGE\]\h\[$WHITE\] \[$GREEN\]\w\[$WHITE\] \[$PURPLE\]\$\[$RESET\] "
+
+if [ -f /usr/local/share/bash-completion/bash_completion ]; then
+    . /usr/local/share/bash-completion/bash_completion
+fi

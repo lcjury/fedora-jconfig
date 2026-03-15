@@ -6,9 +6,3 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # User specific environment and startup programs
-
-PATH=$PATH:$HOME/.local/bin:$HOME/bin
-
-PATH=$PATH:~/.composer/vendor/bin/
-
-export PATH
