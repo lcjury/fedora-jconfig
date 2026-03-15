@@ -68,6 +68,8 @@ window-padding-y = 14
 confirm-close-surface=false
 resize-overlay = never
 gtk-toolbar-style = flat
+window-height = 32
+window-width = 180
 
 # Cursor styling
 cursor-style = "block"
