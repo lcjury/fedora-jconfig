@@ -1,110 +1,119 @@
-#Copy Repositories
-sudo cp repositories/* /etc/yum.repos.d/
+# remove apps
+sudo dnf remove -y firefox gnome-weather gnome-tour
 
-# rpmfusion repo
-#su -c 'dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm'
-#su -c 'dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-rawhide.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-rawhide.noarch.rpm'
-sudo dnf install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm
+# Change alt+tab switch menu
+gsettings set org.gnome.desktop.wm.keybindings switch-applications "@as []"
+gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
 
-#install programs
-sudo dnf install -y gnome-common gtk3-devel gtk2-devel intltool gnome-common tmux nano gcc google-chrome-stable nautilus-dropbox gcc-c++ vim-enhanced git-core unrar gstreamer{1,}-{ffmpeg,libav,plugins-{good,ugly,bad{,-free,-nonfree}}} ffmpeg vim-enhanced intltool gnome-tweak-tool gtk-murrine-engine transmission java-devel
+# Install apps
 
-#sudo yum install gstreamer1-libav gstreamer1-plugins-good
-#gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer-ffmpeg
-#gstreamer-plugins-good gstreamer-plugins-ugly gstreamer-plugins-bad
-#gstreamer-plugins-bad-free gstreamer-plugins-bad-nonfree
+# Basic apps
+sudo dnf install -y vim
 
+# required adicional repo
+sudo dnf copr enable scottames/ghostty
+sudo dnf copr enable jdxcode/mise
+
+# local development tools
+sudo dnf install -y  ghostty mise 
+cp ghostty-config ~/.config/ghostty/config
+
+# required for mise to install ruby
+sudo dnf install -y libyaml libyaml-devel
+
+# Install mise
+# todo (Add mise installation)
+
+# Install ruby versions
+mise use -g ruby@3.3.7
+mise use -g node
+
+# Personal applications
+
+# open code
+command -v opencode >/dev/null 2>&1 || curl -fsSL https://opencode.ai/install | bash
+curl -fsSL https://claude.ai/install.sh | bash
+
+
+# rclone to sync files to google drive
+sudo dnf install -y rclone
+rclone config
+
+# rclone config steps
+# New remote
+# name: drive
+# Storage: drive
+# Client_id: <blank>
+# client_secret: <blank>
+# scope: 1 (full access)
+# service_account_file: <blank>
+# advanced config: No
+# use web broser: Yes
+# Shared drive: no
+# Keep this "drive" remote?: yes
+
+mkdir ~/Drive
+(crontab -l 2>/dev/null; echo '*/5 * * * * flock -n /tmp/rclone-bisync.lock /usr/bin/rclone bisync drive: /home/$USER/Drive >> /home/$USER/rclone.log 2>&1') | crontab -
+
+# Install brew
+# watchman is required for vscode
+brew install watchman
+
+# Gaming // Steam
+# https://docs.fedoraproject.org/en-US/gaming/proton/
+sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
+sudo dnf install -y steam
+
+# Discord
+flatpak install app/com.discordapp.Discord/x86_64/stable
+
+# Nvidia drivers
+# Last time I tried this, spend a whole day fixing nvidia errors :(
+#sudo dnf install akmod-nvidia -y
+
+# Development tools
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc &&
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+dnf check-update &&
+sudo dnf install code # or code-insiders
 
 
 #configure git
 git config --global user.name "lcjury"
-git config --global user.email zeui16@gmail.com
+git config --global user.email lcjury@gmail.com
 
-#download solarized theme for gnome terminal
-git clone https://github.com/sigurdga/gnome-terminal-colors-solarized.git
-cd gnome-terminal-colors-solarized
-sh install.sh
-cd ..
-#delete solarized theme repo
-rm -rf gnome-terminal-colors-solarized
+# preinstall tools with mise
+mise use --global ruby
+mise use --global node
 
-#init dropbox
-dropbox start -i &
+# postgres local db
+# https://docs.fedoraproject.org/es/quick-docs/postgresql/
 
-# Set Keyboard Shortcuts Bindings
-gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "open-terminal"
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command gnome-terminal
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Alt><Ctrl>T"
+sudo dnf install postgresql-server postgresql-contrib
+sudo systemctl enable postgresql
+sudo postgresql-setup --initdb --unit postgresql
+# to start server sudo systemctl start postgresql
+echo "to create a user execute sudo -u postgres psql"
+echo "postgres=# CREATE USER lenny WITH PASSWORD 'leonard';"
+echo "postgres=# CREATE DATABASE my_project OWNER lenny;"
+echo "and postgres=# \password postgres for pg password"
 
-#install alternate tab gnome shell extension
-git clone git://git.gnome.org/gnome-shell-extensions
-cd gnome-shell-extensions
-sh autogen.sh
-make
-sudo cp -r extensions/alternate-tab /usr/share/gnome-shell/extensions/
-cd ../
-#delete gnome shell extensions repo
-sudo rm -rf gnome-shell-extensions
+# Add common aliases
+echo "alias gd='git diff'" >> ~/.bashrc
+echo "alias ga='git add'" >> ~/.bashrc
+echo "alias gs='git status'" >> ~/.bashrc
+source ~/.bashrc
 
-#Ruby on Rails
-sudo dnf install mysql-devel ruby-devel rubygems libxml2-devel libxslt-devel sqlite-devel nodejs rpm-build
-gem install rails
-gem install sqlite3
-gem install heroku
+# disable paste on middle click
+gsettings set org.gnome.desktop.interface gtk-enable-primary-paste false
 
-# Vim Pathogen
-mkdir -p ~/.vim/autoload ~/.vim/bundle && \
-curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+# Adjust swappiness. I have enough ram to decrease it
+echo "vm.swappiness=10" | sudo tee /etc/sysctl.d/99-swappiness.conf
 
-# Vim config
-git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-cp .vimrc ~/.vimrc
-vim +PluginInstall +qall
+# install brew. It's required to install watchamn, which is required for sorbet vscode plugin
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-#Fonts
-dnf install -y google-droid-sans-mono-fonts
-
-#Setting droid sans mono 11 for terminal font
-$PROFILE=`dconf read /org/gnome/terminal/legacy/profiles:/default | sed s/^\'// | sed s/\'$//`
-dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/font "'Droid Sans Mono 11'"
-dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE/use-system-font false
-dconf write /org/gnome/terminal/legacy/default-show-menubar false
-#Bash
-cp .bashrc ~/.bashrc
-cp .git-completion.bash ~/.git-completion.bash
-cp .tmux.conf ~/.tmux.conf
-
-#Apache & PHP
-sudo dnf install -y httpd php mariadb-server php-mysql phpmyadmin
-#restorecon -R /var/www/html
-#Start httpd: systemctl start httpd
-#vi /var/www/html/test.php
-mysql_secure_installation
-
-#Common installs
-sudo dnf install -y npm
-sudo npm install --global gulp
-
-# Install ceti 2 theme
-git clone https://github.com/horst3180/ceti-2-theme --depth 1 && cd ceti-2-theme
-./autogen.sh --prefix=/usr
-sudo make install
-cd ..
-
-
-#Laravel installation 
-# When installing composer, ~/.composer/vendor/bin should be added to path
-sudo dnf install -y composer php-mcrypt
-composer global require "laravel/installer=~1.1"
-
-#Git tab-complete
-sudo cp git-completion.bash /etc/bash_completion.d/
-#Artisan tab-complete
-sudo cp artisan /etc/bash_completion.d/
-
-#Install and set Ceti-2 Theme
-git clone https://github.com/horst3180/ceti-2-theme --depth 1 && cd ceti-2-theme
-./autogen.sh --prefix=/usr
-sudo make install
-dconf write /org/gnome/desktop/interface/gtk-theme 'Ceti-2'
+echo >> ~/.bashrc
+echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"' >> ~/.bashrc
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
