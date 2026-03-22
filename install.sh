@@ -1,12 +1,11 @@
-# remove apps
-sudo dnf remove -y firefox gnome-weather gnome-tour
+cp kglobalshortcutsrc ~/.config/kglobalshortcutsrc
+cp kdeglobals ~/.config/kdeglobals
+cp kwinrc ~/.config/kwinrc
 
-# Change alt+tab switch menu
-gsettings set org.gnome.desktop.wm.keybindings switch-applications "@as []"
-gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
+# remove apps
+sudo dnf remove -y firefox 
 
 # Install apps
-
 # Basic apps
 sudo dnf install -y vim
 
@@ -104,6 +103,20 @@ echo "alias gd='git diff'" >> ~/.bashrc
 echo "alias ga='git add'" >> ~/.bashrc
 echo "alias gs='git status'" >> ~/.bashrc
 source ~/.bashrc
+
+# KDE Jury theme
+mkdir -p ~/.local/share/color-schemes
+mkdir -p ~/.local/share/aurorae/themes
+mkdir -p ~/.local/share/plasma/look-and-feel
+
+cp kde-themes/color-schemes/Jury.colors ~/.local/share/color-schemes/
+cp -r kde-themes/aurorae/Jury ~/.local/share/aurorae/themes/
+cp -r kde-themes/look-and-feel/Jury ~/.local/share/plasma/look-and-feel/
+
+plasma-apply-colorscheme Jury
+plasma-apply-lookandfeel Jury
+kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key library org.kde.kwin.aurorae
+kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key theme "__aurorae__svg__Jury"
 
 # disable paste on middle click
 gsettings set org.gnome.desktop.interface gtk-enable-primary-paste false

@@ -1,0 +1,15 @@
+[Desktops]
+Id_1=b3727728-ec80-470a-862f-09dae4219d74
+Number=1
+Rows=1
+
+[Tiling][b3727728-ec80-470a-862f-09dae4219d74][4927fcc6-6ad8-4696-8c3a-927c07f9ddff]
+padding=4
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Xwayland]
+Scale=1
+
+[org.kde.kdecoration2]
+library=org.kde.kwin.aurorae.v2
+theme=__aurorae__svg__Jury

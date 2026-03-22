@@ -1,0 +1,24 @@
+{
+    "KPackageStructure": "aurorae",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "lcjury@gmail.com",
+                "Name": "Luis Jury"
+            }
+        ],
+        "Category": "Plasma 6 Window Decorations",
+        "ServiceTypes": [
+            "aurorae"
+        ],
+        "EnabledByDefault": true,
+        "Name": "Jury",
+        "Description" : "Jury window decorations",
+        "Id": "Jury",
+        "License": "GPL v3",
+        "Version": "1.0",
+        "X-KDE-PluginInfo-blur": true,
+        "X-KPackage-Dependencies": [
+        ]
+    }
+}
